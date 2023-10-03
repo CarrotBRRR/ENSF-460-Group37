@@ -86,40 +86,41 @@ int main(void) {
      
     
     while(1){
-//        uint16_t input = 0b0000;
-//        if(PORTAbits.RA2 == 1){
-//            input = input | 0b1000;
-//        }
-//        if(PORTBbits.RB4 == 1){
-//            input = input | 0b0100;
-//        }
-//        if(PORTAbits.RA4 == 1){
-//            input = input | 0b0010;
-
-        if((PORTAbits.RA2 && PORTBbits.RB4 && PORTAbits.RA4) == 1){
+        wait(16000);
+        unsigned int input = 0b0000;
+        if(PORTAbits.RA2 == 0){
+            input = input | 0b0001;
+        }
+        if(PORTBbits.RB4 == 0){
+            input = input | 0b0010;
+        }
+        if(PORTAbits.RA4 == 0){
+            input = input | 0b0100;
+        }
+        if(input == 0){
             LATBbits.LATB8 = 0;
         }
         
-        else if(PORTAbits.RA2 == 0 && PORTBbits.RB4 == 1 && PORTAbits.RA4 == 1){
+        else if(input == 0b0001){
             LATBbits.LATB8 = 1;
-            wait(160000);
+            wait(320000);
             LATBbits.LATB8 = 0;
-            wait(160000);
+            wait(320000);
             
         }
         
-        else if(PORTAbits.RA2 == 1 && PORTBbits.RB4 == 0 && PORTAbits.RA4 == 1){
+        else if(input == 0b0010){
             LATBbits.LATB8 = 1;
-            wait(320000);
+            wait(640000);
             LATBbits.LATB8 = 0;
-            wait(320000);
+            wait(640000);
         }
         
-        else if(PORTAbits.RA2 == 1 && PORTBbits.RB4 == 1 && PORTAbits.RA4 == 0){
+        else if(input == 0b0100){
             LATBbits.LATB8 = 1;
-            wait(480000);
+            wait(960000);
             LATBbits.LATB8 = 0;
-            wait(480000);
+            wait(960000);
         }
 
         else {
