@@ -214,12 +214,12 @@ usercode
 
 __FBS             0xf80000          0x2
  *(__FBS.sec*)
- __FBS.sec        0xf80000          0x2 /CW/_FBSê4◊
+ __FBS.sec        0xf80000          0x2 /CW/_FBSPÙ∫
                   0xf80000                  __FBS.sec
 
 __FGS             0xf80004          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf80004          0x2 /CW/_FGSì÷
+ __FGS.sec        0xf80004          0x2 /CW/_FGSÄ$ª
                   0xf80004                  __FGS.sec
 
 __FOSCSEL
@@ -252,9 +252,9 @@ __FDS
  *(.debug_abbrev)
  .debug_abbrev    0x000000        0x148 build/default/production/_ext/1472/main.o
 
-.debug_line       0x000000        0x147
+.debug_line       0x000000        0x145
  *(.debug_line)
- .debug_line      0x000000        0x147 build/default/production/_ext/1472/main.o
+ .debug_line      0x000000        0x145 build/default/production/_ext/1472/main.o
 
 .debug_frame      0x000000         0x62
  *(.debug_frame)
@@ -689,8 +689,8 @@ LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libm-elf.a
 LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a
 END GROUP
 OUTPUT(dist/default/production/DriverProject2.X.production.elf elf32-pic30)
-LOAD /CW/_FGSì÷
-LOAD /CW/_FBSê4◊
+LOAD /CW/_FGSÄ$ª
+LOAD /CW/_FBSPÙ∫
 LOAD default_isr
 
 .debug_pubtypes
