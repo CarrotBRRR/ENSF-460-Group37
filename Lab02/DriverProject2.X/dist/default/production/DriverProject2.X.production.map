@@ -18,7 +18,7 @@ Command:
   -Lc:/program files/microchip/xc16/v2.10/bin/bin/../../support/dsPIC33C/gld \
   -Lc:/program files/microchip/xc16/v2.10/bin/bin/../../support/dsPIC33E/gld \
   -Lc:/program files/microchip/xc16/v2.10/bin/bin/../../support/dsPIC33F/gld \
-  build/default/production/_ext/1472/main.o \
+  build/default/production/main.o \
   --defsym=__MPLAB_BUILD=1 \
   -Tp24F16KA101.gld.00 \
   --stack=16 \
@@ -160,7 +160,7 @@ FDS              0xf80010           0x000002
 
 Linker script and memory map
 
-LOAD build/default/production/_ext/1472/main.o
+LOAD build/default/production/main.o
                     0x0001                  __MPLAB_BUILD = 0x1
 LOAD pPIC24Fxxx
 LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libfx-elf.a
@@ -214,12 +214,12 @@ usercode
 
 __FBS             0xf80000          0x2
  *(__FBS.sec*)
- __FBS.sec        0xf80000          0x2 /CW/_FBSPÙ∫
+ __FBS.sec        0xf80000          0x2 /CW/_FBS†¥
                   0xf80000                  __FBS.sec
 
 __FGS             0xf80004          0x2
  *(__FGS.sec*)
- __FGS.sec        0xf80004          0x2 /CW/_FGSÄ$ª
+ __FGS.sec        0xf80004          0x2 /CW/_FGSê¥
                   0xf80004                  __FGS.sec
 
 __FOSCSEL
@@ -243,26 +243,26 @@ __FDS
 .comment
  *(.comment)
 
-.debug_info       0x000000        0xa47
+.debug_info       0x000000        0xa44
  *(.debug_info)
- .debug_info      0x000000        0xa47 build/default/production/_ext/1472/main.o
+ .debug_info      0x000000        0xa44 build/default/production/main.o
  *(.gnu.linkonce.wi.*)
 
 .debug_abbrev     0x000000        0x148
  *(.debug_abbrev)
- .debug_abbrev    0x000000        0x148 build/default/production/_ext/1472/main.o
+ .debug_abbrev    0x000000        0x148 build/default/production/main.o
 
-.debug_line       0x000000        0x145
+.debug_line       0x000000        0x142
  *(.debug_line)
- .debug_line      0x000000        0x145 build/default/production/_ext/1472/main.o
+ .debug_line      0x000000        0x142 build/default/production/main.o
 
 .debug_frame      0x000000         0x62
  *(.debug_frame)
- .debug_frame     0x000000         0x62 build/default/production/_ext/1472/main.o
+ .debug_frame     0x000000         0x62 build/default/production/main.o
 
 .debug_str        0x000000         0x51
  *(.debug_str)
- .debug_str       0x000000         0x51 build/default/production/_ext/1472/main.o
+ .debug_str       0x000000         0x51 build/default/production/main.o
 
 .debug_loc
  *(.debug_loc)
@@ -274,7 +274,7 @@ __FDS
                   0x000000         0x33
  *(.debug_pubnames)
  .debug_pubnames
-                  0x000000         0x33 build/default/production/_ext/1472/main.o
+                  0x000000         0x33 build/default/production/main.o
 
 .debug_ranges
  *(.debug_ranges)
@@ -282,7 +282,7 @@ __FDS
 .debug_aranges    0x000000         0x18
  *(.debug_aranges)
  .debug_aranges
-                  0x000000         0x18 build/default/production/_ext/1472/main.o
+                  0x000000         0x18 build/default/production/main.o
                     0x0000                  WREG0 = 0x0
                     0x0000                  _WREG0 = 0x0
                     0x0002                  WREG1 = 0x2
@@ -689,19 +689,19 @@ LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libm-elf.a
 LOAD c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-elf.a
 END GROUP
 OUTPUT(dist/default/production/DriverProject2.X.production.elf elf32-pic30)
-LOAD /CW/_FGSÄ$ª
-LOAD /CW/_FBSPÙ∫
+LOAD /CW/_FGSê¥
+LOAD /CW/_FBS†¥
 LOAD default_isr
 
 .debug_pubtypes
                   0x000018        0x126
  .debug_pubtypes
-                  0x000018        0x126 build/default/production/_ext/1472/main.o
+                  0x000018        0x126 build/default/production/main.o
 
 __c30_signature
                   0x00013e         0x12
  __c30_signature
-                  0x00013e          0x6 build/default/production/_ext/1472/main.o
+                  0x00013e          0x6 build/default/production/main.o
  __c30_signature
                   0x000144          0x6 c:/program files/microchip/xc16/v2.10/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
  __c30_signature
@@ -710,26 +710,26 @@ __c30_signature
 .config_DSWDTEN
                   0xf80010          0x2
  .config_DSWDTEN
-                  0xf80010          0x2 build/default/production/_ext/1472/main.o
+                  0xf80010          0x2 build/default/production/main.o
 
 .config_BKBUG     0xf8000e          0x2
- .config_BKBUG    0xf8000e          0x2 build/default/production/_ext/1472/main.o
+ .config_BKBUG    0xf8000e          0x2 build/default/production/main.o
 
 .config_MCLRE     0xf8000c          0x2
- .config_MCLRE    0xf8000c          0x2 build/default/production/_ext/1472/main.o
+ .config_MCLRE    0xf8000c          0x2 build/default/production/main.o
 
 .config_FWDTEN    0xf8000a          0x2
  .config_FWDTEN
-                  0xf8000a          0x2 build/default/production/_ext/1472/main.o
+                  0xf8000a          0x2 build/default/production/main.o
 
 .config_FCKSM     0xf80008          0x2
- .config_FCKSM    0xf80008          0x2 build/default/production/_ext/1472/main.o
+ .config_FCKSM    0xf80008          0x2 build/default/production/main.o
 
 .config_IESO      0xf80006          0x2
- .config_IESO     0xf80006          0x2 build/default/production/_ext/1472/main.o
+ .config_IESO     0xf80006          0x2 build/default/production/main.o
 
 .text             0x0002ce         0xea
- .text            0x0002ce         0xea build/default/production/_ext/1472/main.o
+ .text            0x0002ce         0xea build/default/production/main.o
                   0x0002ce                  _main
                   0x000352                  _wait
                   0x00036c                  _checkInput
