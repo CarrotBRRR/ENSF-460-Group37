@@ -13,7 +13,8 @@
 #include <errno.h>
 
 #include "IOs.h"
-//#include "TimeDelay.h"
+#include "ChangeClk.h"
+#include "TimeDelay.h"
 
 //// CONFIGURATION BITS - PRE-PROCESSOR DIRECTIVES ////
 
@@ -68,45 +69,47 @@
 uint8_t userInput = 0;
 
 int main(void) {
+    NewClk(0x55);
     IOinit();
 
-    while(1){
-               
+    while(1) {
         /* button logic */
-        while (userInput == 0){                // no buttons being pressed
+        while (userInput == 0b1111) {          // more than 1 button pressed
             LATBbits.LATB8 = 0;
+        }
+        
+        while (userInput == 0b0011){           // buttons 1 and 2 pressed
+            LATBbits.LATB8 = 1;
+            delay_ms(1);
+            LATBbits.LATB8 = 0;
+            delay_ms(1);
         }
         
         while (userInput == 0b0001){           // button 1
             LATBbits.LATB8 = 1;
-            delay_ms(400000);
+            delay_ms(1000);
             LATBbits.LATB8 = 0;
-            delay_ms(400000);
+            delay_ms(1000);
         }
         
         while (userInput == 0b0010){           // button 2
             LATBbits.LATB8 = 1;
-            delay_ms(800000);
+            delay_ms(2000);
             LATBbits.LATB8 = 0;
-            delay_ms(800000);
+            delay_ms(2000);
         }
         
         while (userInput == 0b0100){           // button 3
             LATBbits.LATB8 = 1;
-            delay_ms(1200000);
+            delay_ms(3000);
             LATBbits.LATB8 = 0;
-            delay_ms(1200000);
+            delay_ms(3000);
         }
-        
-        while (userInput == 0b1111) {          // more than 1 button pressed
-            LATBbits.LATB8 = 1;
-        }
-            
      }
     return 0;
 }
 
-void __attribute__((interupt, no_auto_psv)) _CNInterrupt(void){
+void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void){
     if (IFS1bits.CNIF == 1) {
         userInput = IOcheck();
     }
