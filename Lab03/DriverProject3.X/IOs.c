@@ -32,9 +32,9 @@ void IOinit(){
     IEC1bits.CNIE = 1;    // Enables CN Interrupts    
 }
 
-uint8_t IOcheck() {
-    /* input */
+uint8_t IOcheck() { 
     uint8_t input = 0;
+
     if(PORTAbits.RA2 == 0){             // button 1
         input = input | 0b0001;
     }
@@ -46,7 +46,7 @@ uint8_t IOcheck() {
     }
     
     // return 
-    if (input == 0b0000 || input == 0b0001 || input == 0b0010 || input == 0b0100) {
+    if (input == 0b0011 || input == 0b0001 || input == 0b0010 || input == 0b0100) {
         return input;
     } else {
         return 0b1111;

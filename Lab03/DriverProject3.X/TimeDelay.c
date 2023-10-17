@@ -26,13 +26,15 @@ void delay_ms(uint32_t time) {
     PR2 = 16 * time; // Set Time in ms
     TMR2 = 0;        // Clear TMR2
     T2CONbits.TON = 1; // Start Timer
-    while(TMR2flag == 0){
+    while(TMR2flag != 1){
         Idle();
     }
+    return;
 }
 
-void __attribute__((interupt, no_auto_psv)) _T2Interrupt(void){
+void __attribute__((interrupt, no_auto_psv)) _T2Interrupt(void){
     IFS0bits.T2IF = 0; // clear timer 2 flag
     T2CONbits.TON = 0; // stop the timer
     TMR2flag = 1;
+    return;
 }

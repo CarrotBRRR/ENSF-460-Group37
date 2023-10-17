@@ -152,6 +152,5 @@ unsigned int checkInput() {
         return 0b1111;
     }
     
-    
 }
 
