@@ -47,9 +47,4 @@ uint8_t IOcheck() {
     
     // return 
     return input;
-//    if (input == 0b0011 || input == 0b0001 || input == 0b0010 || input == 0b0100) {
-//        return input;
-//    } else {
-//        return 0b1111;
-//    }
 }
