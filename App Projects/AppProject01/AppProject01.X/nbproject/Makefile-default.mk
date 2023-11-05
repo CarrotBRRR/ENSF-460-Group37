@@ -51,17 +51,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=ourSource/ChangeClk.c ourSource/IOs.c ourSource/TimeDelay.c ourSource/UART2.c ourSource/main.c
+SOURCEFILES_QUOTED_IF_SPACED=ChangeClk.c IOs.c TimeDelay.c UART2.c main.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/ourSource/ChangeClk.o ${OBJECTDIR}/ourSource/IOs.o ${OBJECTDIR}/ourSource/TimeDelay.o ${OBJECTDIR}/ourSource/UART2.o ${OBJECTDIR}/ourSource/main.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/ourSource/ChangeClk.o.d ${OBJECTDIR}/ourSource/IOs.o.d ${OBJECTDIR}/ourSource/TimeDelay.o.d ${OBJECTDIR}/ourSource/UART2.o.d ${OBJECTDIR}/ourSource/main.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/ChangeClk.o ${OBJECTDIR}/IOs.o ${OBJECTDIR}/TimeDelay.o ${OBJECTDIR}/UART2.o ${OBJECTDIR}/main.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/ChangeClk.o.d ${OBJECTDIR}/IOs.o.d ${OBJECTDIR}/TimeDelay.o.d ${OBJECTDIR}/UART2.o.d ${OBJECTDIR}/main.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/ourSource/ChangeClk.o ${OBJECTDIR}/ourSource/IOs.o ${OBJECTDIR}/ourSource/TimeDelay.o ${OBJECTDIR}/ourSource/UART2.o ${OBJECTDIR}/ourSource/main.o
+OBJECTFILES=${OBJECTDIR}/ChangeClk.o ${OBJECTDIR}/IOs.o ${OBJECTDIR}/TimeDelay.o ${OBJECTDIR}/UART2.o ${OBJECTDIR}/main.o
 
 # Source Files
-SOURCEFILES=ourSource/ChangeClk.c ourSource/IOs.c ourSource/TimeDelay.c ourSource/UART2.c ourSource/main.c
+SOURCEFILES=ChangeClk.c IOs.c TimeDelay.c UART2.c main.c
 
 
 
@@ -89,66 +89,66 @@ MP_LINKER_FILE_OPTION=,--script=p24F16KA101.gld
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/ourSource/ChangeClk.o: ourSource/ChangeClk.c  .generated_files/flags/default/911ba9e31cc4ed39a16a2d619faf26fac0f34132 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/ChangeClk.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/ChangeClk.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/ChangeClk.c  -o ${OBJECTDIR}/ourSource/ChangeClk.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/ChangeClk.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/ChangeClk.o: ChangeClk.c  .generated_files/flags/default/c0008e3a576c3d08defc22835c8eda57a38df5ac .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ChangeClk.o.d 
+	@${RM} ${OBJECTDIR}/ChangeClk.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ChangeClk.c  -o ${OBJECTDIR}/ChangeClk.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ChangeClk.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/IOs.o: ourSource/IOs.c  .generated_files/flags/default/3ce72a3827f11077bd62d5b3d2e02f3b41f866bc .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/IOs.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/IOs.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/IOs.c  -o ${OBJECTDIR}/ourSource/IOs.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/IOs.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/IOs.o: IOs.c  .generated_files/flags/default/d97d5de6b2282ec967d865e1d66a3d3311cece42 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/IOs.o.d 
+	@${RM} ${OBJECTDIR}/IOs.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  IOs.c  -o ${OBJECTDIR}/IOs.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/IOs.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/TimeDelay.o: ourSource/TimeDelay.c  .generated_files/flags/default/f3123d92d124923d8ad9fce989310cd78fe72dd3 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/TimeDelay.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/TimeDelay.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/TimeDelay.c  -o ${OBJECTDIR}/ourSource/TimeDelay.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/TimeDelay.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/TimeDelay.o: TimeDelay.c  .generated_files/flags/default/a4916fd280f466a20b5a2f2e60dbd12abb424033 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/TimeDelay.o.d 
+	@${RM} ${OBJECTDIR}/TimeDelay.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  TimeDelay.c  -o ${OBJECTDIR}/TimeDelay.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/TimeDelay.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/UART2.o: ourSource/UART2.c  .generated_files/flags/default/1248dab8fc2df9bedb481f7a8c6907806f7a6bf2 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/UART2.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/UART2.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/UART2.c  -o ${OBJECTDIR}/ourSource/UART2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/UART2.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/UART2.o: UART2.c  .generated_files/flags/default/1fe679f3656c6ac4f862e0066ce536c6ee66533a .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/UART2.o.d 
+	@${RM} ${OBJECTDIR}/UART2.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  UART2.c  -o ${OBJECTDIR}/UART2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/UART2.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/main.o: ourSource/main.c  .generated_files/flags/default/1a24395ce0ae0939167d580f0016f8a13f10bca7 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/main.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/main.c  -o ${OBJECTDIR}/ourSource/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/main.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/65150d8e0aaf3221b63dd62704a2fe85eab20d5d .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"      -g -D__DEBUG     -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 else
-${OBJECTDIR}/ourSource/ChangeClk.o: ourSource/ChangeClk.c  .generated_files/flags/default/577813ad64a7273f8b491d45161047a6a7989f7f .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/ChangeClk.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/ChangeClk.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/ChangeClk.c  -o ${OBJECTDIR}/ourSource/ChangeClk.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/ChangeClk.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/ChangeClk.o: ChangeClk.c  .generated_files/flags/default/f0c248b3b5e07498eeb084af3899219cbfe0e11 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/ChangeClk.o.d 
+	@${RM} ${OBJECTDIR}/ChangeClk.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  ChangeClk.c  -o ${OBJECTDIR}/ChangeClk.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ChangeClk.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/IOs.o: ourSource/IOs.c  .generated_files/flags/default/75278f9e751fc1bf376f852a8b414693cd12ac02 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/IOs.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/IOs.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/IOs.c  -o ${OBJECTDIR}/ourSource/IOs.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/IOs.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/IOs.o: IOs.c  .generated_files/flags/default/84bb08821a864e30fde765b3a84f4388bead7aa4 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/IOs.o.d 
+	@${RM} ${OBJECTDIR}/IOs.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  IOs.c  -o ${OBJECTDIR}/IOs.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/IOs.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/TimeDelay.o: ourSource/TimeDelay.c  .generated_files/flags/default/fdc52806caad14e3415ec3bbfab2356081d6a313 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/TimeDelay.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/TimeDelay.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/TimeDelay.c  -o ${OBJECTDIR}/ourSource/TimeDelay.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/TimeDelay.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/TimeDelay.o: TimeDelay.c  .generated_files/flags/default/8beb19c9d6655b375425442d3b40a79ad2b737c5 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/TimeDelay.o.d 
+	@${RM} ${OBJECTDIR}/TimeDelay.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  TimeDelay.c  -o ${OBJECTDIR}/TimeDelay.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/TimeDelay.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/UART2.o: ourSource/UART2.c  .generated_files/flags/default/43c9262a75699744e8124905681f608d58d3e8a6 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/UART2.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/UART2.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/UART2.c  -o ${OBJECTDIR}/ourSource/UART2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/UART2.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/UART2.o: UART2.c  .generated_files/flags/default/770ab688a9b8a41b47669717e4b1d8bcfaab3f68 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/UART2.o.d 
+	@${RM} ${OBJECTDIR}/UART2.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  UART2.c  -o ${OBJECTDIR}/UART2.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/UART2.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
-${OBJECTDIR}/ourSource/main.o: ourSource/main.c  .generated_files/flags/default/955871c985623a74f2783f1312c242ab57de58c7 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
-	@${MKDIR} "${OBJECTDIR}/ourSource" 
-	@${RM} ${OBJECTDIR}/ourSource/main.o.d 
-	@${RM} ${OBJECTDIR}/ourSource/main.o 
-	${MP_CC} $(MP_EXTRA_CC_PRE)  ourSource/main.c  -o ${OBJECTDIR}/ourSource/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/ourSource/main.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
+${OBJECTDIR}/main.o: main.c  .generated_files/flags/default/ecf0f347a6b54f26ad2753000911061a59fac498 .generated_files/flags/default/da39a3ee5e6b4b0d3255bfef95601890afd80709
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/main.o.d 
+	@${RM} ${OBJECTDIR}/main.o 
+	${MP_CC} $(MP_EXTRA_CC_PRE)  main.c  -o ${OBJECTDIR}/main.o  -c -mcpu=$(MP_PROCESSOR_OPTION)  -MP -MMD -MF "${OBJECTDIR}/main.o.d"        -g -omf=elf -DXPRJ_default=$(CND_CONF)    $(COMPARISON_BUILD)  -O0 -msmart-io=1 -Wall -msfr-warn=off    -mdfp="${DFP_DIR}/xc16"
 	
 endif
 
