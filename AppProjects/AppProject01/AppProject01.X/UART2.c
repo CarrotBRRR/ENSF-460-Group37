@@ -225,8 +225,10 @@ void Disp2String(char *str) //Displays String of characters
 }
 
 void DispTime(uint8_t minutes, uint8_t seconds) {
-    char string[12];
-    sprintf(string,"\r%02d m : %02d s", minutes, seconds);
-    Disp2String(string);
+    char string[25];                                // create a string for sprintf
+    sprintf(string,"\r%02d m : %02d s          ", 
+            minutes, seconds);                      // add the variables to the string
+    Disp2String(string);                            // display the string
+    
     return;
 }

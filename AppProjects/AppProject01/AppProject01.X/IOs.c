@@ -1,6 +1,7 @@
 #include <p24F16KA101.h>
 
 #include "IOs.h"
+#include "TimeDelay.h"
 
 void InitIO(){
     //Clock output on REFO pin - pin 18 RB15
@@ -32,19 +33,44 @@ void InitIO(){
     IEC1bits.CNIE = 1;    // Enables CN Interrupts    
 }
 
-uint8_t checkIO() { 
-    uint8_t input = 0;
+// timer variables
+extern alarm_flag;
+uint8_t minutes = 0;
+uint8_t seconds = 0;
 
-    if(PORTAbits.RA2 == 0){             // button 1
-        input = input | 0b0001;
+/*
+    Checks if timer should increment by a minute or second based on button press
+*/
+void checkIO() { 
+    alarm_flag = 0;                     // reset the alarm flag
+
+    if(PORTAbits.RA2 == 0) {            // button 1
+        addSeconds(60);                 // add a minute to timer
+        return;
     }
-    if(PORTBbits.RB4 == 0){             // button 2
-        input = input | 0b0010;
+
+    if(PORTBbits.RB4 == 0) {            // button 2
+        addSeconds(1);                  // add a second to timer
+        return;
     }
-    if(PORTAbits.RA4 == 0){             // button 3
-        input = input | 0b0100;
-    }
-    
-    // return 
-    return input;
 }
+
+/*
+    Function to add seconds to our timer
+    Takes in integer of how many seconds to add
+*/
+void addSeconds(uint8_t s) {        
+    if( ((minutes*60) + seconds + s) <= 3599 ){
+        seconds += s;               // add seconds
+
+        while(seconds >= 60){       // while there are too many seconds
+            seconds -= 60;          // decrement by 60 sec
+            minutes++;              // increment by 1 min
+        }
+    }
+
+    DispTime(minutes, seconds);     // display the new time
+
+    return;
+}
+

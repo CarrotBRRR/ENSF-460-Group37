@@ -67,13 +67,12 @@
 #define dsen() {__asm__ volatile ("BSET DSCON, #15");}
 
 // Global Variables
-extern uint8_t TMR2flag;
-uint8_t userInput;
-uint8_t CNflag;
-uint8_t run_flag;
+uint8_t CNflag = 0;
+uint8_t run_flag = 0;
+uint8_t alarm_flag = 0;
+extern uint8_t minutes;
+extern uint8_t seconds;
 
-uint8_t minutes;
-uint8_t seconds;
 
 int main(void) {
     // Initialization function calls
@@ -81,62 +80,54 @@ int main(void) {
     InitIO();
     InitUART2();
     
-    // Initial variables
-    userInput = checkIO();
-    CNflag = 0;
-    run_flag = 0;
-    minutes = 0;
-    seconds = 0;
-    
     // initial print of 00m : 00s
     DispTime(minutes, seconds);
     
-    delay_sec();
-    
     while(1) {
-        if (CNflag == 1 || run_flag == 1) {
-            userInput = checkIO();
-            switch(userInput){
-                case 0b001:                         // PB1: increment minutes
-                    addSeconds(60);    
-                case 0b010:                         // PB2: increment seconds
-                    addSeconds(1);    
-                case 0b100:                         // PB3: start/pause timer
-                    
-                    if (run_flag == 0) {
-                            run_flag = 1;
-                        } else {
-                            run_flag = 0;
-                    }
-                    hold_check();
-                    // start a timer to see if held
-                    while(PORTAbits.RA4 == 0) {}    // stay here while button is pressed
-                    if (TMR2flag == 1) {            // if TMR2flag == 1 then button was long pressed, reset timer
-                        run_flag = 0;
-                        minutes = 0;                
-                        seconds = 0;         
-                        DispTime(minutes, seconds);
-                    }
-                default:
-                    if(run_flag == 1 && (minutes != 0 || seconds != 0)){
-                        doClock();
-                    }
+
+        if (CNflag == 1) {                          // if a Change Notification was sent
+            CNflag = 0;                             // reset the flag
+            uint8_t counter = 0;                    // reset counter
+            while (PORTAbits.RA4 == 0) {            // check if button is being held
+                counter++;                          // increment the counter
+                delay_ms(250, 1);                   // wait 250ms
             }
-            CNflag == 0;                            // reset CNflag
+            if (counter >= 12) {                    // button was held for more than 3 seconds (3sec * 4(quarter sec) = 12)
+                // reset variables
+                alarm_flag = 0;
+                run_flag = 0;
+                minutes = 0;
+                seconds = 0;
+                DispTime(minutes, seconds);         // display 0 min 0 sec
+            } else {                                // button was short pressed, toggle pause/start timer
+                run_flag = !run_flag;          
+            }
+        }
+         
+        if (run_flag == 1 && (minutes != 0 || seconds != 0)) {
+            doClock();
+            DispTime(minutes, seconds);
+            if (minutes == 0 && seconds == 0) {
+                alarm_flag = 1;
+                run_flag = 0;
+                Disp2String("\r00 m : 00 s -- ALARM");
+                while(alarm_flag == 1) {    // while alarming
+                    LATBbits.LATB8 = 1;     // turn on LED
+                    delay_sec();            // wait 1 sec
+                    LATBbits.LATB8 = 0;     // turn off LED
+                    delay_sec();            // wait 1 sec
+                }
+                DispTime(minutes, seconds); // update display when we stop alarming
+                
+            } else {
+                LATBbits.LATB8 = 0; // make sure LED is off
+                delay_sec();        // wait 1 second
+            }
+        } else {
+            Idle();
         }
     }
-    
     return 0;
-}
-
-void addSeconds(uint8_t s){
-    seconds += s;
-    if(seconds >= 60){
-        seconds -= 60;
-        minutes++;
-    }
-    DispTime(minutes, seconds);
-    return;
 }
 
 void doClock(){
@@ -146,15 +137,17 @@ void doClock(){
     } else {
         seconds--;                      // decrement 1 second
     }
-    DispTime(minutes, seconds);         // update timer
-    delay_sec();                  // wait for 1 second
+    
+    return;
 }
-
-
-void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void){
-    if(IFS1bits.CNIF == 1) {
-        CNflag = 1;
-    }
+/*---------------------- CN interrupt ----------------------*/
+void __attribute__((interrupt, no_auto_psv)) _CNInterrupt(void) {
     IFS1bits.CNIF = 0;
+    if (PORTAbits.RA4 == 0) {        // checks to see if button 3 was pressed    
+        CNflag = 1;                  // if so, then trigger a flag to see if button is being held
+        return;
+    } else {
+        checkIO();                   // check the input
+    }    
     return;
 }
