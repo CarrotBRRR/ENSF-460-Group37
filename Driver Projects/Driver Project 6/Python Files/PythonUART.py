@@ -1,52 +1,102 @@
-import serial  # pip install pyserial  or conda install pyserial
+import serial  # pip install pyserial
 import time
 import pandas as pd
-
 import plotly.express as px
 
 ## OPEN SERIAL PORT 
-ser = serial.Serial(port= "COM3", baudrate= 9600, bytesize= 8, timeout= 2, stopbits= serial.STOPBITS_ONE)
+while True:
+    com_port = input("Enter Port or 'exit' to Exit: ")
+    if com_port == "exit":
+        exit(0)
+    try:
+        print(f"Attempting connection on port {com_port}...")
+        ser = serial.Serial(port= com_port, baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
+        print(f"Connection to port {com_port} successful!")
+        break
+    except Exception as e:
+        print("Invalid Port... Please ensure the port name was entered correctly.")
+        print()
 
 ## INITIALIZATIONS
-rxNumsStr = ''      #string to store received uint16_t numbers 
-rxNumsList = []      #List to store received uint16_t numbers in int form 
-rxTimesList = []   #list to store time stamps of received uint16_t numbers
-startTime = time.time()
+NumStrings = ''             # String to store received uint16_t numbers 
+NumList = []                # List to store received uint16_t numbers in int form
+TimeList = []               # list to store time stamps of received uint16_t numbers
+VoltageList = []            # List to store voltage calculated later
+
+resolution = 3 / (2 ** 10)  # Resolution of MCU
 
 ## CAPTURE UART DATA
-while(time.time() - startTime <= 10):                   # record data for 10 sec
+print()
+print("Starting data collection...")
+startTime = time.time()
+while(time.time() - startTime < 10):                   # record data for 10 sec
     line = ser.readline()                               # reads uint16_t nums as single bytes till \n n stores in string
-    if ((line != b' \n') and (line != b'\n')) :         # removes any '\n' without num captures
-        rxNumsStr = rxNumsStr + line.decode('Ascii')    # Converts string of received uint16_t num to ASCII and combines Rx nums into 1 string
-        timestamp = time.time() - startTime             # Time stamp received number
-        rxTimesList.append(timestamp)                   # save time stamps in a list
+    if ((line != b' \n') and (line != b'\n')) :         # ignore any '\n' without num captures
+        try:
+            NumStrings = NumStrings + line.decode('Ascii')  # Converts string of received uint16_t num to ASCII and combines Rx nums into 1 string
+            timestamp = time.time() - startTime             # Time stamp received number
+            TimeList.append(timestamp)                      # Append Timestamp to List
+        except UnicodeDecodeError as e:
+            continue
 
-## CLOSE SERIAL PORT    
-ser.close()  # close any open serial ports
+print("Data collection completed!")
+## CLOSE SERIAL PORT
+print(f"Closing {com_port} connection...")
+ser.close()  # Close open serial ports
 
-### Rx DATA CLEANUP AND STRING TO FLOAT CONVERSION
-rxNumsStr = rxNumsStr.replace('\x00','')  #\x00 seems to be sent with Disp2String()
-rxNumsStr = rxNumsStr.strip() # remove unwanted chars and spaces 
-rxNumsList = rxNumsStr.split(' \n ')  # split string by \n n store in list
-print(rxNumsList)
-rxNumsList = [float(elem) for elem in rxNumsList]  # convert char in List into int
+### DATA CLEANUP
+NumStrings = NumStrings.replace('\x00','')  # \x00 seems to be sent with Disp2String()
+NumStrings = NumStrings.strip()             # remove unwanted chars and spaces 
+NumList = NumStrings.split('\n')            # split string by \n n store in list
 
-# print(rxNumsList)       #check
-print(len(rxTimesList))
-print(len(rxNumsList))
+### STORE VALUES IN LIST
+NumList = [float(elem) for elem in NumList]             # Convert char in List into Float
+# print(NumList)
 
-### CONVERT Rx DATA INTO DATA FRAME
-dF = pd.DataFrame()
-dF['Rx Time (sec)'] = rxTimesList
-dF['Rx Data'] = rxNumsList
+VoltageList = [elem * resolution for elem in NumList]   # Calculate Voltage and store in list
+# print(VoltageList)
+
+# print(len(TimeList))
+# print(len(NumList))
+# print(len(VoltageList))
+
+### CONVERT DATA INTO DATA FRAME
+print()
+print("Converting to DataFrame...")
+ADCdF = pd.DataFrame()
+ADCdF['Time (sec)'] = TimeList
+ADCdF['Data (ADCBUFF Value)'] = NumList
+
+VdF = pd.DataFrame()
+VdF['Time (sec)'] = TimeList
+VdF['Data (Voltage)'] = VoltageList
+print("Done Converting! ")
 
 ### DATA STATISTICS
-print(dF.describe())
+print()
+print("ADC DataFrame Statisitcs:")
+print(ADCdF.describe())
+
+print()
+print("Voltage DataFrame Statistics:")
+print(VdF.describe())
 
 ### COPY RX DATA AND RX TIME IN CSV AND XLS FILES
-dF.to_csv('RxDataFloat.csv', index= True)
-dF.to_excel('RxDataFloat.xlsx', sheet_name='New Sheet')
+print()
+print("Saving to .csv and .xlsx...")
+ADCdF.to_csv('ADCBuffer.csv', index= True)
+ADCdF.to_excel('ADCBuffer.xlsx', sheet_name='New Sheet')
+
+VdF.to_csv('Voltages.csv', index= True)
+VdF.to_excel('Voltages.xlsx', sheet_name='New Sheet')
+print("Done saving to .csv and .xlsx!")
 
 ### PLOT Rx DATA VS Rx TIME
-fig = px.line(dF, x='Rx Time (sec)', y='Rx Data', title = 'RS232 Data vs Time')
+print()
+print("Plotting Data...")
+fig = px.line(ADCdF, x='Time (sec)', y='Data (ADCBUFF Value)', title = 'ADCBUFF Value vs. Time')
+fig2 = px.line(VdF, x='Time (sec)', y='Data (Voltage)', title='Voltage vs. Time')
+
 fig.show()
+fig2.show()
+print("Done Plotting!")
