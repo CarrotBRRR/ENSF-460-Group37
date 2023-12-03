@@ -11,11 +11,10 @@ while True:
     try:
         print(f"Attempting connection on port {com_port}...")
         ser = serial.Serial(port= com_port, baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-        print(f"Connection to port {com_port} successful!")
+        print(f"Connection to port {com_port} successful!\n")
         break
     except Exception as e:
-        print("Invalid Port... Please ensure the port name was entered correctly.")
-        print()
+        print("Invalid Port... Please ensure the port name was entered correctly.\n")
 
 ## INITIALIZATIONS
 NumStrings = ''             # String to store received uint16_t numbers 
@@ -26,10 +25,9 @@ VoltageList = []            # List to store voltage calculated later
 resolution = 3 / (2 ** 10)  # Resolution of MCU
 
 ## CAPTURE UART DATA
-print()
-print("Starting data collection...")
+print("Starting data collection...\n")
 startTime = time.time()
-while(time.time() - startTime < 10):                   # record data for 10 sec
+while(time.time() - startTime < 60):                   # record data for 60 sec
     line = ser.readline()                               # reads uint16_t nums as single bytes till \n n stores in string
     if ((line != b' \n') and (line != b'\n')) :         # ignore any '\n' without num captures
         try:
@@ -41,7 +39,7 @@ while(time.time() - startTime < 10):                   # record data for 10 sec
 
 print("Data collection completed!")
 ## CLOSE SERIAL PORT
-print(f"Closing {com_port} connection...")
+print(f"Closing {com_port} connection...\n")
 ser.close()  # Close open serial ports
 
 ### DATA CLEANUP
@@ -61,7 +59,6 @@ VoltageList = [elem * resolution for elem in NumList]   # Calculate Voltage and 
 # print(len(VoltageList))
 
 ### CONVERT DATA INTO DATA FRAME
-print()
 print("Converting to DataFrame...")
 ADCdF = pd.DataFrame()
 ADCdF['Time (sec)'] = TimeList
@@ -70,29 +67,25 @@ ADCdF['Data (ADCBUFF Value)'] = NumList
 VdF = pd.DataFrame()
 VdF['Time (sec)'] = TimeList
 VdF['Data (Voltage)'] = VoltageList
-print("Done Converting! ")
+print("Done Converting! \n")
 
 ### DATA STATISTICS
-print()
 print("ADC DataFrame Statisitcs:")
-print(ADCdF.describe())
+print(ADCdF.describe() + '\n')
 
-print()
 print("Voltage DataFrame Statistics:")
-print(VdF.describe())
+print(VdF.describe() + '\n')
 
 ### COPY RX DATA AND RX TIME IN CSV AND XLS FILES
-print()
 print("Saving to .csv and .xlsx...")
 ADCdF.to_csv('ADCBuffer.csv', index= True)
 ADCdF.to_excel('ADCBuffer.xlsx', sheet_name='New Sheet')
 
 VdF.to_csv('Voltages.csv', index= True)
 VdF.to_excel('Voltages.xlsx', sheet_name='New Sheet')
-print("Done saving to .csv and .xlsx!")
+print("Done saving to .csv and .xlsx!\n")
 
 ### PLOT Rx DATA VS Rx TIME
-print()
 print("Plotting Data...")
 fig = px.line(ADCdF, x='Time (sec)', y='Data (ADCBUFF Value)', title = 'ADCBUFF Value vs. Time')
 fig2 = px.line(VdF, x='Time (sec)', y='Data (Voltage)', title='Voltage vs. Time')
