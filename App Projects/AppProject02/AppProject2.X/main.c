@@ -95,22 +95,28 @@ int main(void) {
 
             // send duty_cycle through UART
             Disp2Dec((uint16_t)duty_cycle);
-            NewClk(32);
+            
 
             // // Need to play around with this pulse_period value
-            float pulse_period = 5;
-            float percent_duty = duty_cycle / 100;
-
+            float pulse_period = 25;
+            
             // Flicker LED based on potentiometer level
-            if (((int)duty_cycle > 3) && ((int)duty_cycle < 95)){
+            if (((int)duty_cycle > 2 ) && ((int)duty_cycle < 95)){
+                
+                duty_cycle = duty_cycle / 5;
+                
+                float on_time = (pulse_period * duty_cycle) / 100;
+                float off_time = pulse_period - off_time;
+                
+                NewClk(32);
                 LED_ON;
-                delay_ms((uint32_t)(pulse_period * percent_duty) + 1);
+                delay_ms(((uint32_t)on_time) + 1);
                 LED_OFF;
-                delay_ms((uint32_t)((pulse_period * (uint32_t)((float)1 - percent_duty)) + 1));
+                delay_ms(((uint32_t)off_time) + 1);
             }
 
             // LED OFF if duty_cycle <= 3 
-            else if (duty_cycle <= 3){ 
+            else if (duty_cycle <= 2){ 
                 LED_OFF;
             }
 
@@ -124,9 +130,9 @@ int main(void) {
             NewClk(32);
             LED_ON;
             // delay_ms is in quarters miliseconds
-            delay_ms(2000);
+            delay_ms(500);
             LED_OFF;
-            delay_ms(2000);
+            delay_ms(500);
         // System is in OFF MODE and saves power.
         } else { 
             NewClk(32);

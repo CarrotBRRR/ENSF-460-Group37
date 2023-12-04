@@ -23,7 +23,7 @@ void delay_ms(uint32_t time) {
     IFS0bits.T2IF = 0;  // timer interrupt flag
     IEC0bits.T2IE = 1;  // enable interrupt timer
     
-    PR2 = 4 * time; // Set Time in ms
+    PR2 = time << 4; // Set Time in ms
     TMR2 = 0;        // Clear TMR2
     T2CONbits.TON = 1; // Start Timer
     while(TMR2flag != 1){
