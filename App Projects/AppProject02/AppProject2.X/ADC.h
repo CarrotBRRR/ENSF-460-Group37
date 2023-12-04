@@ -18,9 +18,10 @@ extern "C" {
 }
 #endif
 //void __attribute__((interrupt, no_auto_psv)) _ADC1Interrupt(void);
-
 void ADC_init(void);
-uint16_t do_ADC(void);
+// uint16_t do_ADC(void);
+unsigned int do_ADC(void);
+
 
 #endif	/* ADC_H */
 

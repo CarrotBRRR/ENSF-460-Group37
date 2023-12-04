@@ -72,6 +72,8 @@
 #define LED_OFF LATBbits.LATB8 = 0;
 
 uint16_t result;
+// uint16_t adc_val;
+unsigned int adc_val;
 uint8_t PB1_flag = 0;
 uint8_t PB2_flag = 0;
 
@@ -82,51 +84,56 @@ int main(void) {
 
     while(1) {
 
-        if (PB1_flag) {
-            NewClk(8);
+        // When PB1 is pressed, system is in ON MODE
+        if (PB1_flag == 1) {
             // Get ADC Value
-            uint16_t adc_val = do_ADC();
+            NewClk(8);
+            adc_val = do_ADC();    
             
             // Calculate Duty Cycle
-            uint32_t duty_cycle = (adc_val) * (100/1024);
+            float duty_cycle = (((float)adc_val * 100)) / 1024;
 
             // send duty_cycle through UART
-            Disp2Dec(duty_cycle);
+            Disp2Dec((uint16_t)duty_cycle);
             NewClk(32);
+
+            // // Need to play around with this pulse_period value
+            float pulse_period = 5;
+            float percent_duty = duty_cycle / 100;
+
+            // Flicker LED based on potentiometer level
+            if (((int)duty_cycle > 3) && ((int)duty_cycle < 95)){
+                LED_ON;
+                delay_ms((uint32_t)(pulse_period * percent_duty) + 1);
+                LED_OFF;
+                delay_ms((uint32_t)((pulse_period * (uint32_t)((float)1 - percent_duty)) + 1));
+            }
+
+            // LED OFF if duty_cycle <= 3 
+            else if (duty_cycle <= 3){ 
+                LED_OFF;
+            }
+
+            // LED ON if duty_cycle >= 95 
+            else if (duty_cycle >= 95){
+                LED_ON;
+            }
             
-            // Need to play around with this pulseFreq value
-            uint8_t pulse_period = 10;
-
-            // Flicker LED 
-            // if (duty_cycle > 0 && duty_cycle < 95){
+        // Blink LED at full brightness for 500ms when PB2 is pressed
+        } else if (PB2_flag == 1) {
+            NewClk(32);
             LED_ON;
-            delay_ms(pulse_period * (1 - (duty_cycle / 100)));
+            // delay_ms is in quarters miliseconds
+            delay_ms(2000);
             LED_OFF;
-            delay_ms(pulse_period * (duty_cycle / 100));
-            // }
-
-            // // LED OFF if duty_cycle == 0 
-            // else if (duty_cycle <= 0){ 
-            //     LED_OFF;
-            // }
-
-            // // LED ON if duty_cycle >= 95 
-            // else if (duty_cycle >= 95){
-            //     LED_ON;
-            // }
-            
-        } else if (PB2_flag) {
-            LED_ON;
-            delay_ms(500);
-            LED_OFF;
-            delay_ms(500);
-
-        } else {
-            // Reduce Clock Speed and Idle
+            delay_ms(2000);
+        // System is in OFF MODE and saves power.
+        } else { 
             NewClk(32);
             Idle();
         }
     }
+    
     return 0;
 }
 

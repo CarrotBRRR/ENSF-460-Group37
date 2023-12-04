@@ -9,59 +9,52 @@
 #include "ADC.h"
 #include "UART2.h"
 
-void ADC_init(void) {
-    /*--------------- ADC INITIALIZATION ---------------*/
+void ADC_init(void)
+{
+	AD1CON1bits.ADON=0;			//Turn off ADC, turn on before sampling in do_ADC()
+	AD1CON1bits.ADSIDL=0;		//Continue ADC operation in idle mode
+	AD1CON1bits.FORM=0b00;		//0b00: Int, 01: Signed Int, 10:Fractional, 11:Signed Fract
+	AD1CON1bits.SSRC=0b111;	//Start ADC conversion Time set by SAMC has passed
+	AD1CON1bits.ASAM=0; 	//Next Sampling begins when SAMP bit is set
+	AD1CON1bits.SAMP=0;		//Set this bit in ADC routine to start sampling  
+
+    // Sampling time and ADC Clk select
+	AD1CON2bits.VCFG=0b000;	 //Vref+=AVDD   Vref-=AVSS
+//	AD1CON2bits.BUFS=1;	//ADC is filling ADC1BUF8-BUFF. Access data in BUF0-7
+	AD1CON2bits.CSCNA=0;	//Do not scan inputs; use channel selected by CH0SA bits
+	AD1CON2bits.SMPI=0b0000; //Any ADC interrrups occur at completion of each sample/convert seq.
+	AD1CON2bits.BUFM=0; //Buffer confugured as 1 16 word buffer 
+	AD1CON2bits.ALTS=0; //Always use MUXA input MUX settings
+	AD1CON3bits.ADRC=0; //0: Use System clk; 1: ADC uses internal RC clock for idle or sleep mode
+	AD1CON3bits.SAMC=0b11111; //Sample time = 31*TAD = 31*1/125e3 = 0.248ms
+    AD1CON3bits.ADCS=0b111111; //ADCS conversion clock selet bits. Ignored if using internal AD RC clock. 
+	
+    // MUX settings
+    AD1CHSbits.CH0NB=0;	//Ch0 MUXB -ve Input is VR-
+	AD1CHSbits.CH0SB=0b0101;	//Positive input is AN5/RA3/pin8 for MUXB
+	AD1CHSbits.CH0NA=0;	//Ch0 -ve Input is VR-
+	AD1CHSbits.CH0SA=0b0101;	//Positive input is AN5/RA3/pin8 for MUXA
+	
+    //IO port selection
+    TRISAbits.TRISA3 = 1;  //Set pin8/RA3/AN5 as input
+    AD1PCFG=0xFFFF; //Set all bits as digital
+	AD1PCFGbits.PCFG5=0; 	//Set only pin8/AN5/RA3 as Analog input for ADC
+	AD1CSSL = 0; //Input Scan disabled, 0x0000 is default state.
     
-    // configure ADC by settings in AD1CON1 register here...
-    // ADCON1bits.ADSIDL = // stop in Idle Mode bit
-    AD1CON1bits.FORM = 0b00; // data output format bits
-    AD1CON1bits.SSRC = 0b111; // Conversion Trigger Source Select bits
-    AD1CON1bits.ASAM = 0; // A/DSample Auto-Start bit
-    
-    // configure ADC by settings in AD1CON2 register here...
-    AD1CON2bits.VCFG = 0b000; // Voltage Reference Configuration bits
-    AD1CON2bits.CSCNA = 0; // Scan Input Selections for CH0+ during Sample A bit
-    AD1CON2bits.SMPI = 0b0000; // Sample/Conversion Sequence Interrupt Mode bits
-    AD1CON2bits.BUFM = 0; // Buffer Fill Mode Select bit    
-    AD1CON2bits.ALTS = 0; // Alternate Input Sample Mode Select bit
-
-    // configure ADC by settings in AD1CON3 register here...
-    AD1CON3bits.ADRC = 0; // ADC Conversion Clock Source bit
-    AD1CON3bits.SAMC = 0b11111; // Auto Sample Time bits
-    AD1CON3bits.ADCS = 0b11111; // ADC Conversion Clock Select bits
-
-    // configure ADC by settings in AD1CHS register here...
-    // // MUX A
-    AD1CHSbits.CH0NA = 0; // Channel 0 Negative Input Select bits
-    AD1CHSbits.CH0SA = 0b0101; // Channel 0 Positive Input Select bits
-    // // MUX B
-    // AD1CHSbits.CH0NB = 0; // Channel 0 Negative Input Select bits
-    // AD1CHSbits.CH0SB = 0b0101; // Channel 0 Positive Input Select bits
-
-    AD1PCFG = 0xFFFF; //Set all bits as digital
-    AD1PCFGbits.PCFG5 = 0; 	//Set only pin8/AN5/RA3 as Analog input for ADC
-
-    // configure ADC by settings in AD1CSSL register here...
-    AD1CSSL = 0x0000; // Analog Input Pin Scan Selection bits
-
-    // turn on ADC module
-    AD1CON1bits.ADON = 1;
-
+    return;
 }
 
-
-uint16_t do_ADC(void){
-    uint16_t ADCvalue; // 16 bit register used to hold ADC converted digital output ADC1BUF0
-    ADC_init();        // Initialize ADC
-    
-    /*----------------------------- ADC SAMPLING AND CONVERSION -----------------------------*/
-    AD1CON1bits.SAMP = 1; // Start sampling, conversion starts automatically after SSRC and SAMC settings
-    while  ( AD1CON1bits.DONE == 0 ) {}  // idle while ADC conversion is not done
-    
-    AD1CON1bits.SAMP = 0; // Stop sampling
-    ADCvalue = ADC1BUF0;    
-    AD1CON1bits.ADON = 0; // Turn of ADC, ADC value stored in ADC1BUF0
-    
-    return ADCvalue;
+unsigned int do_ADC(void)
+{
+	unsigned int ADCvalue;
+    ADC_init();
+    AD1CON1bits.ADON=1;	//Turn on ADC module
+	AD1CON1bits.SAMP=1;	//Start Sampling, Conversion starts automatically after SSRC and SAMC settings
+	while(AD1CON1bits.DONE == 0)
+		{
+		}
+	AD1CON1bits.SAMP=0;	//Stop sampling
+	ADCvalue = ADC1BUF0;
+	AD1CON1bits.ADON=0;	//Turn off ADC, ADC value stored in ADC1BUF0;
+	return (ADCvalue);
 }
-

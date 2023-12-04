@@ -22,12 +22,12 @@ DutyCycleList = []          # List to store received uint16_t numbers in int for
 TimeList = []               # list to store time stamps of received uint16_t numbers
 VpwmList = []               # List to store average PWM voltage calculated later
 
-voltage_resolution = 3 / (2 ** 10)  # Average Voltage
+voltage_resolution = 3 / 100  # Average Voltage
 
 ## CAPTURE UART DATA
 print("Starting data collection...")
 startTime = time.time()
-while(time.time() - startTime < 10):                   # record data for 60 sec
+while(time.time() - startTime < 60):                   # record data for 60 sec
     line = ser.readline()                               # reads uint16_t nums as single bytes till \n n stores in string
     if ((line != b' \n') and (line != b'\n')) :         # ignore any '\n' without num captures
         try:
@@ -70,9 +70,12 @@ print("Voltage DataFrame Statistics:")
 print(VoltageDF.describe())
 
 ### COPY RX DATA AND RX TIME IN CSV AND XLS FILES
-print("Saving to .csv and .xlsx...")
-IntensityDF.to_excel('AppProject2.xlsx', sheet_name='Intensity')
-VoltageDF.to_excel('AppProject2.xlsx', sheet_name='Average Voltage')
+print("Saving to .xlsx...")
+
+with pd.ExcelWriter('AppProject2.xlsx') as writer:
+    IntensityDF.to_excel(writer, sheet_name='Intensity')
+    VoltageDF.to_excel(writer, sheet_name='Average Voltage')
+
 print("Done saving to .csv and .xlsx!")
 
 ### PLOT Rx DATA VS Rx TIME
