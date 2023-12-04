@@ -11,23 +11,23 @@ while True:
     try:
         print(f"Attempting connection on port {com_port}...")
         ser = serial.Serial(port= com_port, baudrate=9600, bytesize=8, timeout=2, stopbits=serial.STOPBITS_ONE)
-        print(f"Connection to port {com_port} successful!\n")
+        print(f"Connection to port {com_port} successful!")
         break
     except Exception as e:
-        print("Invalid Port... Please ensure the port name was entered correctly.\n")
+        print("Invalid Port... Please ensure the port name was entered correctly.")
 
 ## INITIALIZATIONS
 NumStrings = ''             # String to store received uint16_t numbers 
-NumList = []                # List to store received uint16_t numbers in int form
+DutyCycleList = []          # List to store received uint16_t numbers in int form
 TimeList = []               # list to store time stamps of received uint16_t numbers
-VoltageList = []            # List to store voltage calculated later
+VpwmList = []               # List to store average PWM voltage calculated later
 
-resolution = 3 / (2 ** 10)  # Resolution of MCU
+voltage_resolution = 3 / (2 ** 10)  # Average Voltage
 
 ## CAPTURE UART DATA
-print("Starting data collection...\n")
+print("Starting data collection...")
 startTime = time.time()
-while(time.time() - startTime < 60):                   # record data for 60 sec
+while(time.time() - startTime < 10):                   # record data for 60 sec
     line = ser.readline()                               # reads uint16_t nums as single bytes till \n n stores in string
     if ((line != b' \n') and (line != b'\n')) :         # ignore any '\n' without num captures
         try:
@@ -39,56 +39,46 @@ while(time.time() - startTime < 60):                   # record data for 60 sec
 
 print("Data collection completed!")
 ## CLOSE SERIAL PORT
-print(f"Closing {com_port} connection...\n")
+print(f"Closing {com_port} connection...")
 ser.close()  # Close open serial ports
 
 ### DATA CLEANUP
 NumStrings = NumStrings.replace('\x00','')  # \x00 seems to be sent with Disp2String()
 NumStrings = NumStrings.strip()             # remove unwanted chars and spaces 
-NumList = NumStrings.split('\n')            # split string by \n n store in list
+DutyCycleList = NumStrings.split('\n')            # split string by \n n store in list
 
 ### STORE VALUES IN LIST
-NumList = [float(elem) for elem in NumList]             # Convert char in List into Float
-# print(NumList)
-
-VoltageList = [elem * resolution for elem in NumList]   # Calculate Voltage and store in list
-# print(VoltageList)
-
-# print(len(TimeList))
-# print(len(NumList))
-# print(len(VoltageList))
+DutyCycleList = [float(elem) for elem in DutyCycleList]             # Convert char in list into Float
+VpwmList = [elem * voltage_resolution for elem in DutyCycleList]    # Calculate Voltage and store in list
 
 ### CONVERT DATA INTO DATA FRAME
 print("Converting to DataFrame...")
-ADCdF = pd.DataFrame()
-ADCdF['Time (sec)'] = TimeList
-ADCdF['Data (ADCBUFF Value)'] = NumList
+IntensityDF = pd.DataFrame()
+IntensityDF['Time (sec)'] = TimeList
+IntensityDF['Data (Light Intensity)'] = DutyCycleList
 
-VdF = pd.DataFrame()
-VdF['Time (sec)'] = TimeList
-VdF['Data (Voltage)'] = VoltageList
-print("Done Converting! \n")
+VoltageDF = pd.DataFrame()
+VoltageDF['Time (sec)'] = TimeList
+VoltageDF['Data (Voltage)'] = VpwmList
+print("Done Converting!")
 
 ### DATA STATISTICS
 print("ADC DataFrame Statisitcs:")
-print(ADCdF.describe() + '\n')
+print(IntensityDF.describe())
 
 print("Voltage DataFrame Statistics:")
-print(VdF.describe() + '\n')
+print(VoltageDF.describe())
 
 ### COPY RX DATA AND RX TIME IN CSV AND XLS FILES
 print("Saving to .csv and .xlsx...")
-ADCdF.to_csv('ADCBuffer.csv', index= True)
-ADCdF.to_excel('ADCBuffer.xlsx', sheet_name='New Sheet')
-
-VdF.to_csv('Voltages.csv', index= True)
-VdF.to_excel('Voltages.xlsx', sheet_name='New Sheet')
-print("Done saving to .csv and .xlsx!\n")
+IntensityDF.to_excel('AppProject2.xlsx', sheet_name='Intensity')
+VoltageDF.to_excel('AppProject2.xlsx', sheet_name='Average Voltage')
+print("Done saving to .csv and .xlsx!")
 
 ### PLOT Rx DATA VS Rx TIME
 print("Plotting Data...")
-fig = px.line(ADCdF, x='Time (sec)', y='Data (ADCBUFF Value)', title = 'ADCBUFF Value vs. Time')
-fig2 = px.line(VdF, x='Time (sec)', y='Data (Voltage)', title='Voltage vs. Time')
+fig = px.line(IntensityDF, x='Time (sec)', y='Data (Light Intensity)', title = 'Light Intensity vs. Time')
+fig2 = px.line(VoltageDF, x='Time (sec)', y='Data (Voltage)', title='Average PWM Voltage vs. Time')
 
 fig.show()
 fig2.show()
